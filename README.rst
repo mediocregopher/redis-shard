@@ -47,3 +47,7 @@ one machine.
 
 >>> client.tag_keys('*{foo}*') == client.keys('*{foo}*')
 
+Python 3
+---------------
+This fork of redis-shard should work with python3. I've tested it on an instance of python3.3 with the
+redis-2.7.1 package set up in a virtualenv in the basic cases. It totally works (aka, use at your own risk).
