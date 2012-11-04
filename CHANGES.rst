@@ -1,3 +1,7 @@
+0.1.6 (2012-11-04)
+-------------------
+Works on python3 (probably)
+
 0.1.5 (2012-07-16)
 -------------------
 Add many new methods, support socket_timeout and password
