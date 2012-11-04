@@ -3,9 +3,9 @@
 import re
 import redis
 from redis.client import Lock
-from hashring import HashRing
+from redis_shard.hashring import HashRing
 import functools
-from pipeline import Pipeline
+from redis_shard.pipeline import Pipeline
 
 _findhash = re.compile('.*\{(.*)\}.*', re.I)
 
@@ -60,7 +60,7 @@ class RedisShardAPI(object):
     def __wrap(self, method, *args, **kwargs):
         try:
             key = args[0]
-            assert isinstance(key, basestring)
+            assert isinstance(key, str)
         except:
             raise ValueError("method '%s' requires a key param as the first argument" % method)
         server = self.get_server(key)
@@ -69,7 +69,7 @@ class RedisShardAPI(object):
 
     def __wrap_tag(self, method, *args, **kwargs):
         key = args[0]
-        if isinstance(key, basestring) and '{' in key:
+        if isinstance(key, str) and '{' in key:
             server = self.get_server(key)
         elif isinstance(key, list) and '{' in key[0]:
             server = self.get_server(key[0])
@@ -88,7 +88,7 @@ class RedisShardAPI(object):
         else:
             key = args[1]
         try:
-            assert isinstance(key, basestring)
+            assert isinstance(key, str)
         except:
             raise ValueError("method '%s' requires a key param as the second argument" % method)
         server = self.get_server(key)
@@ -99,7 +99,7 @@ class RedisShardAPI(object):
         elif method == "hdel_in":
             method = "hdel"
         else:
-            print "you can't be here"
+            print("you can't be here")
         f = getattr(server, method)
         return f(*args, **kwargs)
 
@@ -114,7 +114,7 @@ class RedisShardAPI(object):
         elif method == "blpop_in":
             method = "blpop"
         else:
-            print "you can't be here"
+            print("you can't be here")
         f = getattr(server, method)
         return f(*args, **kwargs)
 
@@ -150,13 +150,13 @@ class RedisShardAPI(object):
     ###  some methods implement as needed ###
     ########################################
     def brpop(self, key, timeout=0):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             raise NotImplementedError("The key must be single string;mutiple keys cannot be sharded")
         server = self.get_server(key)
         return server.brpop(key, timeout)
 
     def blpop(self, key, timeout=0):
-        if not isinstance(key, basestring):
+        if not isinstance(key, str):
             raise NotImplementedError("The key must be single string;mutiple keys cannot be sharded")
         server = self.get_server(key)
         return server.blpop(key, timeout)

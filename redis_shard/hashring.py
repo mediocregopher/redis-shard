@@ -32,8 +32,8 @@ class HashRing(object):
         """Adds a `node` to the hash ring (including a number of replicas).
         """
         self.nodes.append(node)
-        for x in xrange(self.replicas):
-            crckey = zlib.crc32("%s:%d" % (node, x))
+        for x in range(self.replicas):
+            crckey = zlib.crc32(bytes("{0}:{1}".format(node, x),'UTF-8'))
             self.ring[crckey] = node
             self.sorted_keys.append(crckey)
 
@@ -43,7 +43,7 @@ class HashRing(object):
         """Removes `node` from the hash ring and its replicas.
         """
         self.nodes.remove(node)
-        for x in xrange(self.replicas):
+        for x in range(self.replicas):
             crckey = zlib.crc32("%s:%d" % (node, x))
             self.ring.remove(crckey)
             self.sorted_keys.remove(crckey)
@@ -64,7 +64,7 @@ class HashRing(object):
         """
         if len(self.ring) == 0:
             return [None, None]
-        crc = zlib.crc32(key)
+        crc = zlib.crc32(bytes(key,'UTF-8'))
         idx = bisect.bisect(self.sorted_keys, crc)
         idx = min(idx, (self.replicas * len(self.nodes)) - 1)
                   # prevents out of range index

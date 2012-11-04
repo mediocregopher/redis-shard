@@ -16,7 +16,7 @@ class Pipeline(object):
     def __wrap(self, method, *args, **kwargs):
         try:
             key = args[0]
-            assert isinstance(key, basestring)
+            assert isinstance(key, str)
         except:
             raise ValueError("method '%s' requires a key param as the first argument" % method)
         pipeline = self.get_pipeline(key)
@@ -25,7 +25,7 @@ class Pipeline(object):
 
     def __wrap_tag(self, method, *args, **kwargs):
         key = args[0]
-        if isinstance(key, basestring) and '{' in key:
+        if isinstance(key, str) and '{' in key:
             pipeline = self.get_pipeline(key)
         elif isinstance(key, list) and '{' in key[0]:
             pipeline = self.get_pipeline(key[0])
@@ -41,7 +41,7 @@ class Pipeline(object):
         else:
             key = args[1]
         try:
-            assert isinstance(key, basestring)
+            assert isinstance(key, str)
         except:
             raise ValueError("method '%s' requires a key param as the second argument" % method)
         pipeline = self.get_pipeline(key)
@@ -52,7 +52,7 @@ class Pipeline(object):
         elif method == "hdel_in":
             method = "hdel"
         else:
-            print "you can't be here"
+            print("you can't be here")
         f = getattr(pipeline, method)
         return f(*args, **kwargs)
 
@@ -64,7 +64,7 @@ class Pipeline(object):
         elif method == "blpop_in":
             method = "blpop"
         else:
-            print "you can't be here"
+            print("you can't be here")
         f = getattr(pipeline, method)
         return f(*args, **kwargs)
 

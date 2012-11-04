@@ -7,3 +7,6 @@ dist
 tags
 local_config.py
 local_settings.py
+bin/
+lib/
+include/
